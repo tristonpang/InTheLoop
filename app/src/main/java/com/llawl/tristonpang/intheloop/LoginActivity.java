@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = mPasswordView.getText().toString();
 
         if (email.equals("") || password.equals("")) {
-            Toast.makeText(this, R.string.no_email_pw, Toast.LENGTH_SHORT);
+            Toast.makeText(this, R.string.no_email_pw, Toast.LENGTH_SHORT).show();
             return;
         } else {
             Toast.makeText(this, R.string.login_in_progress, Toast.LENGTH_SHORT).show();
