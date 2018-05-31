@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">In The Loop</string>
+    <string name="email_text">Email</string>
+    <string name="password_text">Password</string>
+    <string name="signin_text">Sign-in</string>
+    <string name="register_text">Register</string>
+    <string name="no_email_pw">Please fill in your email/password</string>
+    <string name="login_in_progress">Logging in...</string>
+    <string name="name_text">Name</string>
+    <string name="rc_text">Residential College</string>
+    <string name="contact_num_text">Contact Number</string>
+
+    <string-array name="rc_list">
+        <item>Select a Residential College</item>
+        <item>College of Alice and Peter Tan</item>
+        <item>Residential College 4</item>
+        <item>Cinnamon College (USP)</item>
+        <item>Tembusu College</item>
+        <item>Ridge View Residential College</item>
+    </string-array>
+</resources>

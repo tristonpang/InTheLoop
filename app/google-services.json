@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "189037498301",
+    "firebase_url": "https://in-the-loop-16156.firebaseio.com",
+    "project_id": "in-the-loop-16156",
+    "storage_bucket": "in-the-loop-16156.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189037498301:android:31e1c752cea44ede",
+        "android_client_info": {
+          "package_name": "com.llawl.tristonpang.intheloop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189037498301-gsb54ae0ckdftes0gc2pa3c1c1fr7r1q.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "189037498301-gsb54ae0ckdftes0gc2pa3c1c1fr7r1q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdFe9571MN_Jgy2Tz1r7eWqiIZzv-_3Q8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
