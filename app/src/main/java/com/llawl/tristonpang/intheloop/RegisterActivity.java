@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -25,10 +27,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mConfirmPasswordView;
     private AutoCompleteTextView mNameView;
     private Spinner mRcSpinner;
     private String mRC;
     private EditText mContactNumView;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mEmailView = findViewById(R.id.emailTextView);
         mPasswordView = findViewById(R.id.passwordTextView);
+        mConfirmPasswordView = findViewById(R.id.confirmPasswordTextView);
         mNameView = findViewById(R.id.nameTextView);
         mRcSpinner = findViewById(R.id.rcSpinner);
         //creating adapter for spinner
@@ -66,6 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         mContactNumView = findViewById(R.id.contactNumView);
 
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
     }
 
     public void registerNewUser(View v) {
@@ -85,6 +92,10 @@ public class RegisterActivity extends AppCompatActivity {
                         //error dialog
                         showErrorDialog("Registration failed");
                     } else {
+                        //store user info into database
+                        addNewUserToDatabase();
+
+                        //switch back to LoginActivity
                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         finish();
                         startActivity(intent);
@@ -96,18 +107,28 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: Validity checking methods, replace with proper logic
+
     private boolean isEmailValid() {
-        return true;
+        boolean result = mEmailView.getText().toString().contains("@");
+        Log.d("InTheLoop", "isEmailValid(): " + result);
+        return result;
     }
     private boolean isPasswordValid() {
-        return true;
+        String password = mPasswordView.getText().toString();
+        boolean result = password.length() >= 6
+                && mConfirmPasswordView.getText().toString().equals(password);
+        Log.d("InTheLoop", "isPasswordValid(): " + result);
+        return result;
     }
     private boolean isRCValid() {
-        return mRC.equals("Select a Residential College");
+        boolean result = !mRC.equals("Select a Residential College");
+        Log.d("InTheLoop", "isRCValid(): " + result);
+        return result;
     }
     private boolean isNumValid() {
-        return true;
+        boolean result = mContactNumView.getText().toString().length() == 8;
+        Log.d("InTheLoop", "isNumValid(): " + result);
+        return result;
     }
 
     private void showErrorDialog(String msg) {
@@ -117,5 +138,20 @@ public class RegisterActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private void addNewUserToDatabase() {
+        String name = mNameView.getText().toString();
+        String rc = mRC;
+        String contactNum = mContactNumView.getText().toString();
+        String email = mEmailView.getText().toString();
+
+        UserData newUser = new UserData(name, rc, contactNum, email);
+
+        //database paths cannot have . so we replace with -
+        email = email.replace(".","-");
+
+        //email forms the directory path that store the user data
+        mDatabaseReference.child("users").child(email).setValue(newUser);
     }
 }
