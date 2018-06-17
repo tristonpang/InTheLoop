@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".EventsListActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MyInfoActivity"></activity>
+        <activity android:name=".MyInfoActivity" />
+        <activity android:name=".OrganisersActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,9 @@
     <string name="contact_num_text">Contact Number</string>
     <string name="confirm_password_text">Confirm password</string>
     <string name="validate_text">Please check that all fields are filled in and are correct</string>
+    <string name="create_new_events">Create new events</string>
+    <string name="my_organised_events">My organised events</string>
+    <string name="event_organisers">Event Organisers</string>
 
     <string-array name="rc_list">
         <item>Select a Residential College</item>
