@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_songs"
+        android:id="@+id/navigation_myinfo"
         android:icon="@drawable/id_nav"
         android:title="MyInfo"/>
 
     <item
-        android:id="@+id/navigation_albums"
+        android:id="@+id/navigation_events"
         android:icon="@drawable/events_nav"
         android:title="Events"/>
 
     <item
-        android:id="@+id/navigation_artists"
+        android:id="@+id/navigation_org"
         android:icon="@drawable/org_nav"
         android:title="Organisers"/>
 
