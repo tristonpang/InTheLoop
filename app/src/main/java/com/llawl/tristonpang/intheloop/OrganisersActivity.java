@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 public class OrganisersActivity extends AppCompatActivity {
 
@@ -45,5 +46,13 @@ public class OrganisersActivity extends AppCompatActivity {
         overridePendingTransition(0,0);
         startActivity(intent);
         //overridePendingTransition(0,0);
+    }
+
+    /**
+     * Goes to CreateEventActivity. Linked to Create new event button.
+     */
+    public void createNewEvent(View v) {
+        Intent intent = new Intent(OrganisersActivity.this, CreateEventActivity.class);
+        startActivity(intent);
     }
 }

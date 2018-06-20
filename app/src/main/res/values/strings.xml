@@ -11,9 +11,16 @@
     <string name="contact_num_text">Contact Number</string>
     <string name="confirm_password_text">Confirm password</string>
     <string name="validate_text">Please check that all fields are filled in and are correct</string>
-    <string name="create_new_events">Create new events</string>
+    <string name="create_new_event">Create new event</string>
     <string name="my_organised_events">My organised events</string>
     <string name="event_organisers">Event Organisers</string>
+    <string name="event_name">Event Name</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="venue">Venue</string>
+    <string name="event_desc">Event Description</string>
+    <string name="upload_img">Upload Image</string>
+    <string name="change_selected_img">Change Selected Image</string>
 
     <string-array name="rc_list">
         <item>Select a Residential College</item>
