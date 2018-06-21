@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText mEventTimeView;
     private EditText mEventVenueView;
     private EditText mEventDescView;
+    private Button mEventPicSubmit;
+    private String mImageName;
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference; //used to store image
 
@@ -48,6 +52,10 @@ public class CreateEventActivity extends AppCompatActivity {
         mEventTimeView = findViewById(R.id.createEventTimeField);
         mEventVenueView = findViewById(R.id.createEventVenueField);
         mEventDescView = findViewById(R.id.createEventDescField);
+        mEventPicSubmit = findViewById(R.id.createEventImageButton);
+
+        //initialise image name (to empty)
+        mImageName = null;
 
         //set up database and storage references
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -108,6 +116,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
             Uri file = Uri.fromFile(new File(picturePath));
             StorageReference picLocation = mStorageReference.child("images/"+file.getLastPathSegment());
+            mImageName = file.getLastPathSegment();
+            Log.d("InTheLoop", "picturePath - getLastPathSegment(): " + mImageName);
             UploadTask uploadTask = picLocation.putFile(file);
 
             // Register observers to listen for when the download is done or if it fails
@@ -121,12 +131,65 @@ public class CreateEventActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                     Log.d("InTheLoop", "uploadTask Success!");
+                    mEventPicSubmit.setText(R.string.change_selected_img);
                 }
             });
         }
     }
 
+    public void createNewEvent(View v) {
+        attemptCreation();
+    }
 
+    private void attemptCreation() {
+        if (isNameValid() && isDateValid() && isTimeValid() && isVenueValid() && isDescValid() && isImageValid()) {
+            addNewEventToDatabase();
+            //go back to previous page (OrganisersActivity)
+            finish();
+        } else {
+            Toast.makeText(this, R.string.validate_text, Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private boolean isNameValid() {
+        return mEventNameView.getText().toString().length() > 0;
+    }
+
+    private boolean isDateValid() {
+        return mEventDateView.getText().toString().length() > 0;
+    }
+
+    private boolean isTimeValid() {
+        return mEventTimeView.getText().toString().length() > 0;
+    }
+
+    private boolean isVenueValid() {
+        return mEventVenueView.getText().toString().length() > 0;
+    }
+
+    private boolean isDescValid() {
+        return mEventDescView.getText().toString().length() > 0;
+    }
+
+    private boolean isImageValid() {
+        return mImageName != null;
+    }
+
+    private void addNewEventToDatabase() {
+        //retrieve details from fields
+        String name = mEventNameView.getText().toString();
+        String date = mEventDateView.getText().toString();
+        String time = mEventTimeView.getText().toString();
+        String venue = mEventVenueView.getText().toString();
+        String desc = mEventDescView.getText().toString();
+
+        //create new event instance
+        EventInfo newEvent = new EventInfo(name, date, time, venue, desc, mImageName);
+
+        //store in database under name (spaces replaced with underscores)
+        name = name.replace(" ", "_");
+        mDatabaseReference.child("events_info").child(name).setValue(newEvent);
+        Log.d("InTheLoop", "New event created and added: " + name);
+    }
 
 }

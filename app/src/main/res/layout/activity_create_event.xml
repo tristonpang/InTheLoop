@@ -107,6 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createEventImageButton" />
+        app:layout_constraintTop_toBottomOf="@id/createEventImageButton"
+        android:onClick="createNewEvent" />
 
 </android.support.constraint.ConstraintLayout>
