@@ -1,5 +1,6 @@
 package com.llawl.tristonpang.intheloop;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -16,6 +17,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 public class EventsListActivity extends AppCompatActivity {
 
     private Button test_button;
+    private Button generate_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,15 @@ public class EventsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 nextActivity(ScannerActivity.class);
+            }
+        });
+
+        // Testing of QR Scanner only, can delete to shift it around
+        generate_button = (Button) findViewById(R.id.generate_button);
+        generate_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateActivity(QRgeneratorActivity.class);
             }
         });
 
@@ -64,6 +75,12 @@ public class EventsListActivity extends AppCompatActivity {
 
     private void nextActivity(Class destActivity) {
         Intent intent = new Intent(this, ScannerActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    private void generateActivity(Class destActivity) {
+        Intent intent = new Intent(this, QRgeneratorActivity.class);
         finish();
         startActivity(intent);
     }
