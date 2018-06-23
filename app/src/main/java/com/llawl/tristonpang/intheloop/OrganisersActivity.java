@@ -55,4 +55,12 @@ public class OrganisersActivity extends AppCompatActivity {
         Intent intent = new Intent(OrganisersActivity.this, CreateEventActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Goes to MyOrganisedEventsActivity. Linked to My Organised Events button.
+     */
+    public void seeMyOrgEvents(View v) {
+        Intent intent = new Intent(OrganisersActivity.this, MyOrganisedEventsActivity.class);
+        startActivity(intent);
+    }
 }

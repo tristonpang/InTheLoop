@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -182,14 +184,15 @@ public class CreateEventActivity extends AppCompatActivity {
         String time = mEventTimeView.getText().toString();
         String venue = mEventVenueView.getText().toString();
         String desc = mEventDescView.getText().toString();
+        String organiser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         //create new event instance
-        EventInfo newEvent = new EventInfo(name, date, time, venue, desc, mImageName);
+        EventInfo newEvent = new EventInfo(name, date, time, venue, desc, mImageName, organiser);
 
         //store in database under name (spaces replaced with underscores)
         name = name.replace(" ", "_");
         mDatabaseReference.child("events_info").child(name).setValue(newEvent);
-        Log.d("InTheLoop", "New event created and added: " + name);
+        Log.d("InTheLoop", "New event created and added: " + name + ", by " + organiser);
     }
 
 }
