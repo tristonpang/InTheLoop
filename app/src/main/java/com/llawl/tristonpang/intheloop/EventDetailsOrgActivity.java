@@ -1,12 +1,17 @@
 package com.llawl.tristonpang.intheloop;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,17 +25,21 @@ import java.util.HashMap;
 public class EventDetailsOrgActivity extends AppCompatActivity {
     private String mEventName;
     private DatabaseReference mDatabaseReference;
+    private StorageReference mStorageReference;
     private ImageView mEventImage;
     private TextView mEventNameView;
     private TextView mEventDateView;
     private TextView mEventTimeView;
     private TextView mEventVenueView;
     private TextView mEventDescView;
+    private String mImageName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details_org);
+
+        mStorageReference = FirebaseStorage.getInstance().getReference();
 
         //link all views
         mEventImage = findViewById(R.id.eventDetailsOrgImg);
@@ -75,7 +84,59 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
 
         //retrieve and set image
         String imgName = data.get("imageName");
-        StorageReference pathRef = FirebaseStorage.getInstance().getReference().child("images/" + imgName);
+        mImageName = imgName;
+        StorageReference pathRef = mStorageReference.child("images/" + imgName);
         Glide.with(this).using(new FirebaseImageLoader()).load(pathRef).into(mEventImage);
+    }
+
+    public void delete(View v) {
+        showDeleteDialog("Are you sure you want to delete this event?");
+    }
+
+    private void showDeleteDialog(String msg) {
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure?")
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        proceedWithDelete();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void proceedWithDelete() {
+        //find and delete image
+        StorageReference pathRef = mStorageReference.child("images/" + mImageName);
+        pathRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("InTheLoop", "Event image: " + mImageName + " successfully deleted");
+            }
+        });
+
+        //find and delete event details
+        String eventNameKey = mEventName.replace(" ", "_");
+        mDatabaseReference.child(eventNameKey).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                Log.d("InTheLoop", "Event " + mEventName + " successfully deleted");
+            }
+        });
+
+        finish();
+    }
+
+
+
+    public void edit(View v) {
+        beginEdit();
+    }
+
+    private void beginEdit() {
+
     }
 }
