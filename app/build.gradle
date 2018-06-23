@@ -31,6 +31,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:12.0.1'
 
     implementation 'com.android.support:design:27.1.1'
+
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'
