@@ -1,11 +1,13 @@
 package com.llawl.tristonpang.intheloop;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +47,21 @@ public class MyOrganisedEventsActivity extends AppCompatActivity {
         mAdapter = new OrganisedEventsAdapter(mEventsDataset);
         mRecyclerView.setAdapter(mAdapter);
 
+        //add on click listener
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                EventInfo event = mEventsDataset.get(position);
+                Log.d("InTheLoop", "Event selected: " + event.getName());
+                goToEvent(event.getName());
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
         prepareEventsData();
     }
 
@@ -80,5 +97,11 @@ public class MyOrganisedEventsActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void goToEvent(String eventName) {
+        Intent intent = new Intent(MyOrganisedEventsActivity.this, EventDetailsOrgActivity.class);
+        intent.putExtra("eventName", eventName);
+        startActivity(intent);
     }
 }

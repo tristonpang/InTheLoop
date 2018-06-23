@@ -23,7 +23,10 @@
         <activity android:name=".MyInfoActivity" />
         <activity android:name=".OrganisersActivity" />
         <activity android:name=".CreateEventActivity" />
-        <activity android:name=".MyOrganisedEventsActivity"></activity>
+        <activity android:name=".MyOrganisedEventsActivity" />
+        <activity android:name=".ScannerActivity" />
+        <activity android:name=".QRgeneratorActivity"></activity>
+        <activity android:name=".EventDetailsOrgActivity"></activity>
     </application>
 
 </manifest>
