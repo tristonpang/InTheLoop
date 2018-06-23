@@ -21,6 +21,8 @@
     <string name="event_desc">Event Description</string>
     <string name="upload_img">Upload Image</string>
     <string name="change_selected_img">Change Selected Image</string>
+    <string name="qrcode_scanner">QRCode Scanner</string>
+    <string name="scan">SCAN</string>
 
     <string-array name="rc_list">
         <item>Select a Residential College</item>

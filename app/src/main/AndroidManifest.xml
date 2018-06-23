@@ -22,7 +22,8 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MyInfoActivity" />
         <activity android:name=".OrganisersActivity" />
-        <activity android:name=".CreateEventActivity"></activity>
+        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".ScannerActivity"></activity>
     </application>
 
 </manifest>
