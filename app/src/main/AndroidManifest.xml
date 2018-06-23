@@ -25,8 +25,9 @@
         <activity android:name=".CreateEventActivity" />
         <activity android:name=".MyOrganisedEventsActivity" />
         <activity android:name=".ScannerActivity" />
-        <activity android:name=".QRgeneratorActivity"></activity>
-        <activity android:name=".EventDetailsOrgActivity"></activity>
+        <activity android:name=".QRgeneratorActivity" />
+        <activity android:name=".EventDetailsOrgActivity" />
+        <activity android:name=".EditEventActivity"></activity>
     </application>
 
 </manifest>

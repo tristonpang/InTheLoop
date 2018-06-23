@@ -30,6 +30,8 @@
     <string name="date_formatted">Date: %1$s</string>
     <string name="time_formatted">Time: %1$s</string>
     <string name="venue_formatted">Venue: %1$s</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="change_img">Change image</string>
 
 
     <string-array name="rc_list">

@@ -1,6 +1,7 @@
 package com.llawl.tristonpang.intheloop;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -137,6 +138,8 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
     }
 
     private void beginEdit() {
-
+        Intent intent = new Intent(EventDetailsOrgActivity.this, EditEventActivity.class);
+        intent.putExtra("eventName", mEventName);
+        startActivity(intent);
     }
 }
