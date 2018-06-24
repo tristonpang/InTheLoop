@@ -24,24 +24,6 @@ public class EventsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_list);
 
-        // Testing of QR Scanner only, can delete to shift it around
-        test_button = (Button) findViewById(R.id.test_button);
-        test_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextActivity(ScannerActivity.class);
-            }
-        });
-
-        // Testing of QR Scanner only, can delete to shift it around
-        generate_button = (Button) findViewById(R.id.generate_button);
-        generate_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateActivity(QRgeneratorActivity.class);
-            }
-        });
-
         BottomNavigationView navView = findViewById(R.id.navigationView);
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -70,18 +52,6 @@ public class EventsListActivity extends AppCompatActivity {
         Intent intent = new Intent(EventsListActivity.this, destActivity);
         finish();
         overridePendingTransition(0,0);
-        startActivity(intent);
-    }
-
-    private void nextActivity(Class destActivity) {
-        Intent intent = new Intent(this, ScannerActivity.class);
-        finish();
-        startActivity(intent);
-    }
-
-    private void generateActivity(Class destActivity) {
-        Intent intent = new Intent(this, QRgeneratorActivity.class);
-        finish();
         startActivity(intent);
     }
 }

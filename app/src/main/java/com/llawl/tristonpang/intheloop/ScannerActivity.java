@@ -36,19 +36,29 @@ public class ScannerActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText(this, "You cancelled the scanning", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanning cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("test",result.toString());
-                Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
+                String resultValue = result.getContents();
+                Log.d("InTheLoop", "ScannerActivity result: " + resultValue);
+                //Toast.makeText(this, resultValue, Toast.LENGTH_SHORT).show();
                 //Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT);
+
+                //pass back to MyInfoActivity
+                Intent intent = new Intent();
+                intent.putExtra("scanValue", resultValue);
+                setResult(RESULT_OK, intent);
+                finish();
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 }

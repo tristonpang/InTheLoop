@@ -32,6 +32,11 @@
     <string name="venue_formatted">Venue: %1$s</string>
     <string name="save_changes">Save Changes</string>
     <string name="change_img">Change image</string>
+    <string name="my_signed_up_events">My Signed-up Events</string>
+    <string name="name_formatted">Name: %1$s</string>
+    <string name="email_formatted">Email: %1$s</string>
+    <string name="rc_formatted">Residential College: %1$s</string>
+    <string name="scan_signup">Scan &amp; Signup</string>
 
 
     <string-array name="rc_list">
