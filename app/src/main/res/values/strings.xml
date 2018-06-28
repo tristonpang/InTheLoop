@@ -36,7 +36,10 @@
     <string name="name_formatted">Name: %1$s</string>
     <string name="email_formatted">Email: %1$s</string>
     <string name="rc_formatted">Residential College: %1$s</string>
-    <string name="scan_signup">Scan &amp; Signup</string>
+    <string name="scan_signup">Scan &amp; Sign-up</string>
+    <string name="signup">Sign-up</string>
+    <string name="signup_success">Sign-up successful!</string>
+    <string name="already_signed_up">Already signed-up</string>
 
 
     <string-array name="rc_list">
