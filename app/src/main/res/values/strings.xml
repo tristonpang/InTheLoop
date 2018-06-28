@@ -40,6 +40,8 @@
     <string name="signup">Sign-up</string>
     <string name="signup_success">Sign-up successful!</string>
     <string name="already_signed_up">Already signed-up</string>
+    <string name="withdraw">Withdraw from Event</string>
+    <string name="withdrawn_from_event">Successfully withdrawn from event</string>
 
 
     <string-array name="rc_list">

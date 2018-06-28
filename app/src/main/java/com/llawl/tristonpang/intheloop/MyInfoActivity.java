@@ -185,4 +185,13 @@ public class MyInfoActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void mySignedUpEvents(View v) {
+        goToMySignedUpEvents();
+    }
+
+    private void goToMySignedUpEvents() {
+        Intent intent = new Intent(MyInfoActivity.this, MySignedUpEventsActivity.class);
+        startActivity(intent);
+    }
 }

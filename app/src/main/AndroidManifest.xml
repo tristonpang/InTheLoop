@@ -28,7 +28,9 @@
         <activity android:name=".QRgeneratorActivity" />
         <activity android:name=".EventDetailsOrgActivity" />
         <activity android:name=".EditEventActivity" />
-        <activity android:name=".EventDetailsActivity"></activity>
+        <activity android:name=".EventDetailsActivity" />
+        <activity android:name=".MySignedUpEventsActivity" />
+        <activity android:name=".EventDetailsMyActivity"></activity>
     </application>
 
 </manifest>
