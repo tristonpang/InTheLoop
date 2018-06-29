@@ -30,7 +30,8 @@
         <activity android:name=".EditEventActivity" />
         <activity android:name=".EventDetailsActivity" />
         <activity android:name=".MySignedUpEventsActivity" />
-        <activity android:name=".EventDetailsMyActivity"></activity>
+        <activity android:name=".EventDetailsMyActivity" />
+        <activity android:name=".EventAttendanceActivity"></activity>
     </application>
 
 </manifest>

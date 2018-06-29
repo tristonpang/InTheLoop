@@ -43,6 +43,9 @@
     <string name="withdraw">Withdraw from Event</string>
     <string name="withdrawn_from_event">Successfully withdrawn from event</string>
     <string name="invalid_event_code">Invalid event code!</string>
+    <string name="total_attendance">Total attendance</string>
+    <string name="total_attendance_formatted">Total attendance: %1$s</string>
+    <string name="check_attendance">Check attendance</string>
 
 
     <string-array name="rc_list">

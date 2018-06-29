@@ -184,4 +184,14 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
         intent.putExtra("eventName", mEventName);
         startActivity(intent);
     }
+
+    public void checkAttendance(View v) {
+        goToAttendance();
+    }
+
+    private void goToAttendance() {
+        Intent intent = new Intent(EventDetailsOrgActivity.this, EventAttendanceActivity.class);
+        intent.putExtra("eventName", mEventName);
+        startActivity(intent);
+    }
 }
