@@ -95,6 +95,7 @@ public class MySignedUpEventsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Boolean> eventMap = (HashMap) dataSnapshot.getValue();
+                if (eventMap == null) return;
 
                 for (String eventName : eventMap.keySet()) {
                     String eventNameKey = eventName.replace(" ", "_");

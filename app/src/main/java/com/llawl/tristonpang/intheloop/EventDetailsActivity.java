@@ -36,6 +36,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Button mSignupButton;
     private boolean mAlreadySignedUp;
     private DatabaseReference mUserSignupRef;
+    private String mCurrentUserKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_details);
 
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String currentUserKey = currentUser.replace(".", "-");
-        mUserSignupRef = FirebaseDatabase.getInstance().getReference().child("user_signups").child(currentUserKey);
+        mCurrentUserKey = currentUser.replace(".", "-");
+        mUserSignupRef = FirebaseDatabase.getInstance().getReference().child("user_signups").child(mCurrentUserKey);
         mStorageReference = FirebaseStorage.getInstance().getReference();
 
         //link all views
@@ -130,13 +131,41 @@ public class EventDetailsActivity extends AppCompatActivity {
     */
 
     private void attemptSignupForEvent() {
+        //update event attendance
+        final String eventNameKey = mEventName.replace(" ", "_");
+        final DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference().child("event_attendance").child(eventNameKey);
+
+        attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                HashMap<String, Boolean> data = (HashMap<String, Boolean>) snapshot.getValue();
+
+                if (data == null) {
+                    Log.d("InTheLoop", "Null attendance HashMap");
+                    HashMap<String, Boolean> newMap = new HashMap<>();
+                    newMap.put(mCurrentUserKey, true);
+                    attendanceRef.setValue(newMap);
+                } else {
+                    Log.d("InTheLoop", "HashMap exists, update");
+                    HashMap<String, Boolean> newMap = new HashMap<>(data);
+                    newMap.put(mCurrentUserKey, true);
+                    attendanceRef.setValue(newMap);
+                }
+            }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
         //grab initial list of signed up events, update list
         mUserSignupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
-                String eventNameKey = mEventName.replace(" ", "_");
+
                 if (data == null) {
                     Log.d("InTheLoop", "HashMap is null, user has not signed up for any events yet");
                     HashMap<String, Boolean> newMap = new HashMap<>();
@@ -157,6 +186,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 

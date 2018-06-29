@@ -1,6 +1,7 @@
 package com.llawl.tristonpang.intheloop;
 
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,16 +35,16 @@ public class EventDetailsMyActivity extends AppCompatActivity {
     private String mEventName;
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
-    private Button mWithdrawButton;
     private DatabaseReference mUserSignupRef;
+    private String mCurrentUserKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details_my);
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String currentUserKey = currentUser.replace(".", "-");
-        mUserSignupRef = FirebaseDatabase.getInstance().getReference().child("user_signups").child(currentUserKey);
+        mCurrentUserKey = currentUser.replace(".", "-");
+        mUserSignupRef = FirebaseDatabase.getInstance().getReference().child("user_signups").child(mCurrentUserKey);
         mStorageReference = FirebaseStorage.getInstance().getReference();
 
         //link all views
@@ -53,7 +54,7 @@ public class EventDetailsMyActivity extends AppCompatActivity {
         mEventTimeView = findViewById(R.id.eventDetailsMyTimeView);
         mEventVenueView = findViewById(R.id.eventDetailsMyVenueView);
         mEventDescView = findViewById(R.id.eventDetailsMyDescView);
-        mWithdrawButton = findViewById(R.id.eventDetailsMyWithdrawButton);
+
 
         //retrieve event name
         mEventName = getIntent().getStringExtra("eventName");
@@ -117,13 +118,30 @@ public class EventDetailsMyActivity extends AppCompatActivity {
 
 
     private void attemptWithdrawFromEvent() {
+        //update event attendance
+        final String eventNameKey = mEventName.replace(" ","_");
+        final DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference().child("event_attendance").child(eventNameKey);
+        attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
+
+                data.remove(mCurrentUserKey);
+                attendanceRef.setValue(data);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         //grab initial list of signed up events, delete from list
         mUserSignupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
-                String eventNameKey = mEventName.replace(" ", "_");
                 Log.d("InTheLoop", "Withdraw from event - removing " + eventNameKey + " from user's sign-ups list");
                 data.remove(eventNameKey);
                 mUserSignupRef.setValue(data);

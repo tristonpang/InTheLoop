@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class EventDetailsOrgActivity extends AppCompatActivity {
     private String mEventName;
@@ -34,6 +35,7 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
     private TextView mEventVenueView;
     private TextView mEventDescView;
     private String mImageName;
+    private Set<String> mUserSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,26 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
     }
 
     private void proceedWithDelete() {
+        String eventNameKey = mEventName.replace(" ", "_");
+
+        //iterate through attendance list and remove from each user signups, then delete attendance list
+        final DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference().child("event_attendance").child(eventNameKey);
+        attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
+                deleteFromAttendance(data.keySet());
+                attendanceRef.removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         //find and delete image
         StorageReference pathRef = mStorageReference.child("images/" + mImageName);
         pathRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -120,7 +142,6 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
         });
 
         //find and delete event details
-        String eventNameKey = mEventName.replace(" ", "_");
         mDatabaseReference.child(eventNameKey).removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -131,6 +152,27 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
         finish();
     }
 
+    private void deleteFromAttendance(Set<String> dataSet) {
+        final String eventNameKey = mEventName.replace(" ", "_");
+        final DatabaseReference userSignUps = FirebaseDatabase.getInstance().getReference().child("user_signups");
+        for (final String user : dataSet) {
+            userSignUps.child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
+                    data.remove(eventNameKey);
+                    if (data.isEmpty()) userSignUps.child(user).setValue(null);
+                    else userSignUps.child(user).setValue(data);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
 
 
     public void edit(View v) {
