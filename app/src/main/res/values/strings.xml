@@ -42,6 +42,7 @@
     <string name="already_signed_up">Already signed-up</string>
     <string name="withdraw">Withdraw from Event</string>
     <string name="withdrawn_from_event">Successfully withdrawn from event</string>
+    <string name="invalid_event_code">Invalid event code!</string>
 
 
     <string-array name="rc_list">

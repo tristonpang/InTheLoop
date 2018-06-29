@@ -175,15 +175,90 @@ public class MyInfoActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    /**
+     * Method that receives and processes information given back by the ScannerActivity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-                String scanValue = data.getStringExtra("scanValue");
-                Toast.makeText(this, scanValue, Toast.LENGTH_SHORT).show();
+                final String scanValue = data.getStringExtra("scanValue");
+                //Toast.makeText(this, scanValue, Toast.LENGTH_SHORT).show();
+
+                //check if scanValue is a valid event code
+                mDatabaseReference.child("events_info").child(scanValue).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
+                        if (data == null) {
+                            Toast.makeText(MyInfoActivity.this, R.string.invalid_event_code, Toast.LENGTH_LONG).show();
+                        } else {
+                            signUpForEvent(scanValue);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         }
+    }
+
+    private void signUpForEvent(String scanVal) {
+        final String scanValue = scanVal;
+        final String userEmailKey = mUserEmail.replace(".", "-");
+        final DatabaseReference userSignUpRef = mDatabaseReference.child("user_signups").child(userEmailKey);
+        final DatabaseReference attendanceRef = mDatabaseReference.child("event_attendance").child(scanValue);
+
+        //add to user signup list
+        userSignUpRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
+                if (data == null) {
+                    HashMap<String, Boolean> newMap = new HashMap<>();
+                    newMap.put(scanValue, true);
+                    userSignUpRef.setValue(newMap);
+                } else {
+                    HashMap<String, Boolean> newMap = new HashMap<>(data);
+                    newMap.put(scanValue, true);
+                    userSignUpRef.setValue(newMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //add to event attendance list
+        attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
+                if (data == null) {
+                    HashMap<String, Boolean> newMap = new HashMap<>();
+                    newMap.put(userEmailKey, true);
+                    attendanceRef.setValue(newMap);
+                } else {
+                    HashMap<String, Boolean> newMap = new HashMap<>(data);
+                    newMap.put(userEmailKey, true);
+                    attendanceRef.setValue(newMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Toast.makeText(this, R.string.signup_success, Toast.LENGTH_LONG).show();
     }
 
     public void mySignedUpEvents(View v) {
