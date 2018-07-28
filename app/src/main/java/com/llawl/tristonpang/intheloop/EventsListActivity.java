@@ -136,4 +136,9 @@ public class EventsListActivity extends AppCompatActivity {
         intent.putExtra("eventName", eventName);
         startActivity(intent);
     }
+
+    public void goToSearch(View v) {
+        Intent intent = new Intent(EventsListActivity.this, SearchQueryActivity.class);
+        startActivity(intent);
+    }
 }

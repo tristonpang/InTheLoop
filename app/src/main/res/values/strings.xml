@@ -46,6 +46,8 @@
     <string name="total_attendance">Total attendance</string>
     <string name="total_attendance_formatted">Total attendance: %1$s</string>
     <string name="check_attendance">Check attendance</string>
+    <string name="search_for_event">Search for an event</string>
+    <string name="go">Go</string>
 
 
     <string-array name="rc_list">

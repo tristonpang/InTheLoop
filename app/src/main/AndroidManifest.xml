@@ -31,7 +31,9 @@
         <activity android:name=".EventDetailsActivity" />
         <activity android:name=".MySignedUpEventsActivity" />
         <activity android:name=".EventDetailsMyActivity" />
-        <activity android:name=".EventAttendanceActivity"></activity>
+        <activity android:name=".EventAttendanceActivity" />
+        <activity android:name=".SearchQueryActivity" />
+        <activity android:name=".SearchResultsActivity"></activity>
     </application>
 
 </manifest>
