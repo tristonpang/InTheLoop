@@ -8,8 +8,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class OrganisersActivity extends AppCompatActivity {
+    private DatabaseReference mDatabaseReference;
+    private String mUsernameKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,9 @@ public class OrganisersActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("admin_info");
+        mUsernameKey = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "-");
     }
 
     private void goToActivity(Class destActivity) {
@@ -61,6 +76,35 @@ public class OrganisersActivity extends AppCompatActivity {
      */
     public void seeMyOrgEvents(View v) {
         Intent intent = new Intent(OrganisersActivity.this, MyOrganisedEventsActivity.class);
+        startActivity(intent);
+    }
+
+    public void adminFunctions(View v) {
+        checkIfAdmin();
+    }
+
+    private void checkIfAdmin() {
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String,Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                if (data.get(mUsernameKey) != null) {
+                    goToAdmin();
+                } else {
+                    Toast.makeText(OrganisersActivity.this, "You do not have admin privileges!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void goToAdmin() {
+        Intent intent = new Intent(OrganisersActivity.this, AdminActivity.class);
         startActivity(intent);
     }
 }

@@ -81,7 +81,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     HashMap<String,String> data = (HashMap) snapshot.getValue();
-                    if (data.get("name").toLowerCase().contains(mQuery)) {
+                    if (data.get("name").toLowerCase().contains(mQuery) || data.get("desc").toLowerCase().contains(mQuery)) {
                         EventInfo event = new EventInfo(data.get("name"), data.get("date"), data.get("time"), data.get("venue"),
                                 data.get("desc"), data.get("imageName"), data.get("organiser"));
                         mResultsDataset.add(event);

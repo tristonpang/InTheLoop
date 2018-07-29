@@ -91,11 +91,15 @@ public class MySignedUpEventsActivity extends AppCompatActivity {
         });
 
         //retrieve signed up list
-        FirebaseDatabase.getInstance().getReference().child("user_signups").child(currentUserKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("user_signups").child(currentUserKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mEventsDataset.clear();
                 HashMap<String, Boolean> eventMap = (HashMap) dataSnapshot.getValue();
-                if (eventMap == null) return;
+                if (eventMap == null) {
+                    mAdapter.notifyDataSetChanged();
+                    return;
+                }
 
                 for (String eventName : eventMap.keySet()) {
                     String eventNameKey = eventName.replace(" ", "_");

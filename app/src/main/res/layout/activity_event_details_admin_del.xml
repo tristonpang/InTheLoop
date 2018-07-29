@@ -12,17 +12,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/eventDetailsOrgImg"
+            android:id="@+id/eventDetailsAdminDelImg"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:src="@color/common_google_signin_btn_text_dark_disabled" />
-
-        <Button
-            android:id="@+id/eventDetailsOrgAttendanceButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/check_attendance"
-            android:onClick="checkAttendance"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,42 +23,26 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/eventDetailsOrgDeleteButton"
+                android:id="@+id/eventDetailsAdminRemoveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/delete"
-                android:onClick="delete"/>
-
-            <Button
-                android:id="@+id/eventDetailsOrgEditButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/edit"
-                android:onClick="edit"/>
+                android:onClick="adminDelete"
+                android:text="@string/delete" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/eventDetailsOrgNameView"
+            android:id="@+id/eventDetailsAdminDelNameView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="@string/event_name"
             android:textAlignment="center"
             android:textSize="36sp" />
 
         <TextView
-            android:id="@+id/eventDetailsOrgApproveView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/approval_status"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/eventDetailsOrgDateView"
+            android:id="@+id/eventDetailsAdminDelDateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -73,7 +50,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/eventDetailsOrgTimeView"
+            android:id="@+id/eventDetailsAdminDelTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -81,7 +58,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/eventDetailsOrgVenueView"
+            android:id="@+id/eventDetailsAdminDelVenueView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -89,7 +66,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/eventDetailsOrgDescView"
+            android:id="@+id/eventDetailsAdminDelDescView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_desc"

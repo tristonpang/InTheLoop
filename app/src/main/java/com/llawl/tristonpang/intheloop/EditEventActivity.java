@@ -45,6 +45,7 @@ public class EditEventActivity extends AppCompatActivity {
     private String mPicPath;
     private StorageReference mStorageReference;
     private String mOrganiser;
+    private String mApproved;
 
 
 
@@ -92,6 +93,7 @@ public class EditEventActivity extends AppCompatActivity {
         mEventDescView.setText(data.get("desc"));
         mImageName = data.get("imageName");
         mOrganiser = data.get("organiser");
+        mApproved = data.get("approved");
     }
 
     public void changeImage(View v) {
@@ -178,6 +180,7 @@ public class EditEventActivity extends AppCompatActivity {
         newValues.put("imageName", mImageName);
         newValues.put("name", mEventName);
         newValues.put("organiser", mOrganiser);
+        newValues.put("approved", mApproved);
 
         HashMap<String, Object> updates = new HashMap<>();
         String eventNameKey = mEventName.replace(" ", "_");

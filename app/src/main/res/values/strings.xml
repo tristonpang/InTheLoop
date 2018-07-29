@@ -48,6 +48,16 @@
     <string name="check_attendance">Check attendance</string>
     <string name="search_for_event">Search for an event</string>
     <string name="go">Go</string>
+    <string name="admin_functions">Administrator Functions</string>
+    <string name="approve_pending_events">Approve pending events</string>
+    <string name="del_existing_events">Delete existing events</string>
+    <string name="total_pending_formatted">Total pending: %1$s</string>
+    <string name="approve">Approve</string>
+    <string name="remove">Remove</string>
+    <string name="approval_status">Approval Status</string>
+    <string name="approval_status_formatted">Approval Status: %1$s</string>
+    <string name="upload_error">There was an error with the picture upload! Please try again.</string>
+    <string name="creating_event">Creating event...</string>
 
 
     <string-array name="rc_list">

@@ -41,6 +41,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private String mImageName;
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference; //used to store image
+    private String mPicPath;
 
 
     @Override
@@ -56,8 +57,9 @@ public class CreateEventActivity extends AppCompatActivity {
         mEventDescView = findViewById(R.id.createEventDescField);
         mEventPicSubmit = findViewById(R.id.createEventImageButton);
 
-        //initialise image name (to empty)
+        //initialise image name and pic path (to empty)
         mImageName = null;
+        mPicPath = null;
 
         //set up database and storage references
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -110,32 +112,15 @@ public class CreateEventActivity extends AppCompatActivity {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
+            mPicPath = picturePath;
             cursor.close();
 
             // String picturePath contains the path of selected Image
 
             Log.d("InTheLoop", "onActivityResult, picturePath: " + picturePath);
+            mEventPicSubmit.setText(R.string.change_selected_img);
 
-            Uri file = Uri.fromFile(new File(picturePath));
-            StorageReference picLocation = mStorageReference.child("images/"+file.getLastPathSegment());
-            mImageName = file.getLastPathSegment();
-            Log.d("InTheLoop", "picturePath - getLastPathSegment(): " + mImageName);
-            UploadTask uploadTask = picLocation.putFile(file);
 
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.d("InTheLoop", "uploadTask failure!" + exception.toString());
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    Log.d("InTheLoop", "uploadTask Success!");
-                    mEventPicSubmit.setText(R.string.change_selected_img);
-                }
-            });
         }
     }
 
@@ -144,13 +129,38 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void attemptCreation() {
-        if (isNameValid() && isDateValid() && isTimeValid() && isVenueValid() && isDescValid() && isImageValid()) {
-            addNewEventToDatabase();
-            //go back to previous page (OrganisersActivity)
-            finish();
-        } else {
+        //check all fields are valid
+        if (!(isNameValid() && isDateValid() && isTimeValid() && isVenueValid() && isDescValid() && isImageValid())) {
             Toast.makeText(this, R.string.validate_text, Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        //check if image can be uploaded
+        Uri file = Uri.fromFile(new File(mPicPath));
+        StorageReference picLocation = mStorageReference.child("images/"+file.getLastPathSegment());
+        mImageName = file.getLastPathSegment();
+        Log.d("InTheLoop", "picturePath - getLastPathSegment(): " + mImageName);
+        UploadTask uploadTask = picLocation.putFile(file);
+        Toast.makeText(CreateEventActivity.this, R.string.creating_event, Toast.LENGTH_SHORT).show();
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("InTheLoop", "uploadTask failure!" + exception.toString());
+                Toast.makeText(CreateEventActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                Log.d("InTheLoop", "uploadTask Success!");
+                addNewEventToDatabase();
+                //go back to previous page (OrganisersActivity)
+                finish();
+            }
+        });
+
     }
 
     private boolean isNameValid() {
@@ -174,7 +184,7 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private boolean isImageValid() {
-        return mImageName != null;
+        return mPicPath != null;
     }
 
     private void addNewEventToDatabase() {

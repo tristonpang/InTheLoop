@@ -3,15 +3,15 @@ package com.llawl.tristonpang.intheloop;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -19,17 +19,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MyOrganisedEventsActivity extends AppCompatActivity {
+public class AdminApproveActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private OrganisedEventsAdapter mAdapter;
+    private AdminApproveAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<EventInfo> mEventsDataset;
+    private TextView mTotalPendingView;
+
+    private DatabaseReference mDatabaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_organised_events);
-        mRecyclerView = (RecyclerView) findViewById(R.id.org_recycler_view);
+        setContentView(R.layout.activity_admin_approve);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events_info");
+
+        mTotalPendingView = findViewById(R.id.pendingCounterView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.pendingEventsList);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -44,7 +52,7 @@ public class MyOrganisedEventsActivity extends AppCompatActivity {
         mEventsDataset = new ArrayList<>();
 
         // specify an adapter (see also next example)
-        mAdapter = new OrganisedEventsAdapter(mEventsDataset);
+        mAdapter = new AdminApproveAdapter(mEventsDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         //add on click listener
@@ -66,29 +74,23 @@ public class MyOrganisedEventsActivity extends AppCompatActivity {
     }
 
     private void prepareEventsData() {
-        final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.d("InTheLoop", "prepareEventsData(), currentUser = " + currentUser);
-        FirebaseDatabase.getInstance().getReference().child("events_info").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mEventsDataset.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //EventInfo event = snapshot.getValue(EventInfo.class);
-                    HashMap<String,String> data = (HashMap) snapshot.getValue();
-                    //Log.d("InTheLoop", "Event name: " + event.getName());
-                    //if (event.getOrganiser().equals(currentUser)) {
-                    if (data.get("organiser").equals(currentUser)) {
-
+                    HashMap<String, String> data = (HashMap<String, String>) snapshot.getValue();
+                    //check for approved tag (to be applied backend)
+                    if (data.get("approved") == null) {
                         EventInfo event = new EventInfo(data.get("name"), data.get("date"), data.get("time"), data.get("venue"),
                                 data.get("desc"), data.get("imageName"), data.get("organiser"));
                         Log.d("InTheLoop", "Adding event: " + event.getName());
                         mEventsDataset.add(event);
                     }
-
-
-
                 }
                 mAdapter.notifyDataSetChanged();
+                String totalPending = getString(R.string.total_pending_formatted, Integer.toString(mEventsDataset.size()));
+                mTotalPendingView.setText(totalPending);
             }
 
             @Override
@@ -96,13 +98,13 @@ public class MyOrganisedEventsActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void goToEvent(String eventName) {
-        Intent intent = new Intent(MyOrganisedEventsActivity.this, EventDetailsOrgActivity.class);
+        Intent intent = new Intent(AdminApproveActivity.this, EventDetailsAdminActivity.class);
         intent.putExtra("eventName", eventName);
         startActivity(intent);
     }
+
+
 }

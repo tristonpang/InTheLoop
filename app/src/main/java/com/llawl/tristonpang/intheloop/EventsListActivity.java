@@ -114,12 +114,14 @@ public class EventsListActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     HashMap<String,String> data = (HashMap) snapshot.getValue();
 
-                    //create event and load string values
-                    EventInfo event = new EventInfo(data.get("name"), data.get("date"), data.get("time"), data.get("venue"),
-                            data.get("desc"), data.get("imageName"), data.get("organiser"));
-                    Log.d("InTheLoop", "Adding event to EventsList: " + event.getName());
-                    mEventsDataset.add(event);
-
+                    //check if event is approved
+                    if (data.get("approved") != null) {
+                        //create event and load string values
+                        EventInfo event = new EventInfo(data.get("name"), data.get("date"), data.get("time"), data.get("venue"),
+                                data.get("desc"), data.get("imageName"), data.get("organiser"));
+                        Log.d("InTheLoop", "Adding event to EventsList: " + event.getName());
+                        mEventsDataset.add(event);
+                    }
                 }
                 mAdapter.notifyDataSetChanged();
             }

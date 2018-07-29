@@ -33,7 +33,12 @@
         <activity android:name=".EventDetailsMyActivity" />
         <activity android:name=".EventAttendanceActivity" />
         <activity android:name=".SearchQueryActivity" />
-        <activity android:name=".SearchResultsActivity"></activity>
+        <activity android:name=".SearchResultsActivity" />
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".AdminApproveActivity" />
+        <activity android:name=".AdminDelActivity" />
+        <activity android:name=".EventDetailsAdminActivity" />
+        <activity android:name=".EventDetailsAdminDelActivity"></activity>
     </application>
 
 </manifest>

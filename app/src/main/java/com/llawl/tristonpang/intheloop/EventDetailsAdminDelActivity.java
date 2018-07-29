@@ -1,7 +1,6 @@
 package com.llawl.tristonpang.intheloop;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Set;
 
-public class EventDetailsOrgActivity extends AppCompatActivity {
+public class EventDetailsAdminDelActivity extends AppCompatActivity {
     private String mEventName;
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
@@ -35,33 +34,33 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
     private TextView mEventVenueView;
     private TextView mEventDescView;
     private String mImageName;
-    private TextView mEventApproveView;
-    private Set<String> mUserSet;
+    private String mOrganiser;
+    private String mEventDate;
+    private String mEventTime;
+    private String mEventVenue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details_org);
-
-        mStorageReference = FirebaseStorage.getInstance().getReference();
-
-        //link all views
-        mEventImage = findViewById(R.id.eventDetailsOrgImg);
-        mEventNameView = findViewById(R.id.eventDetailsOrgNameView);
-        mEventDateView = findViewById(R.id.eventDetailsOrgDateView);
-        mEventTimeView = findViewById(R.id.eventDetailsOrgTimeView);
-        mEventVenueView = findViewById(R.id.eventDetailsOrgVenueView);
-        mEventDescView = findViewById(R.id.eventDetailsOrgDescView);
-        mEventApproveView = findViewById(R.id.eventDetailsOrgApproveView);
-
+        setContentView(R.layout.activity_event_details_admin_del);
 
         //retrieve event name
         mEventName = getIntent().getStringExtra("eventName");
 
+        //link all views
+        mEventImage = findViewById(R.id.eventDetailsAdminDelImg);
+        mEventNameView = findViewById(R.id.eventDetailsAdminDelNameView);
+        mEventDateView = findViewById(R.id.eventDetailsAdminDelDateView);
+        mEventTimeView = findViewById(R.id.eventDetailsAdminDelTimeView);
+        mEventVenueView = findViewById(R.id.eventDetailsAdminDelVenueView);
+        mEventDescView = findViewById(R.id.eventDetailsAdminDelDescView);
+
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+
         //retrieve all relevant event data from database
         String eventNameKey = mEventName.replace(" ", "_");
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events_info");
-        mDatabaseReference.child(eventNameKey).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(eventNameKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 retrieveDetails(dataSnapshot);
@@ -76,23 +75,20 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
 
     private void retrieveDetails(DataSnapshot snapshot) {
         HashMap<String, String> data = (HashMap) snapshot.getValue();
-        if (data == null) return;
+        mEventDate = data.get("date");
+        mEventTime = data.get("time");
+        mEventVenue = data.get("venue");
         //set all text views
-        String date = getString(R.string.date_formatted, data.get("date"));
-        String time = getString(R.string.time_formatted, data.get("time"));
-        String venue = getString(R.string.venue_formatted, data.get("venue"));
+        String date = getString(R.string.date_formatted, mEventDate);
+        String time = getString(R.string.time_formatted, mEventTime);
+        String venue = getString(R.string.venue_formatted, mEventVenue);
 
         mEventNameView.setText(mEventName);
         mEventDateView.setText(date);
         mEventTimeView.setText(time);
         mEventVenueView.setText(venue);
         mEventDescView.setText(data.get("desc"));
-        if (data.get("approved") == null) {
-            mEventApproveView.setText("Not approved");
-        } else {
-            mEventApproveView.setText("Approved");
-        }
-
+        mOrganiser = data.get("organiser");
 
         //retrieve and set image
         String imgName = data.get("imageName");
@@ -101,7 +97,7 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
         Glide.with(this).using(new FirebaseImageLoader()).load(pathRef).into(mEventImage);
     }
 
-    public void delete(View v) {
+    public void adminDelete(View v) {
         showDeleteDialog("Are you sure you want to delete this event?");
     }
 
@@ -129,7 +125,7 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Boolean> data = (HashMap) dataSnapshot.getValue();
-                if (data != null) deleteFromAttendance(data.keySet());
+                if(data != null) deleteFromAttendance(data.keySet());
                 attendanceRef.removeValue();
             }
 
@@ -184,23 +180,6 @@ public class EventDetailsOrgActivity extends AppCompatActivity {
     }
 
 
-    public void edit(View v) {
-        beginEdit();
-    }
 
-    private void beginEdit() {
-        Intent intent = new Intent(EventDetailsOrgActivity.this, EditEventActivity.class);
-        intent.putExtra("eventName", mEventName);
-        startActivity(intent);
-    }
 
-    public void checkAttendance(View v) {
-        goToAttendance();
-    }
-
-    private void goToAttendance() {
-        Intent intent = new Intent(EventDetailsOrgActivity.this, EventAttendanceActivity.class);
-        intent.putExtra("eventName", mEventName);
-        startActivity(intent);
-    }
 }

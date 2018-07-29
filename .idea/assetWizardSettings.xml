@@ -34,9 +34,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Orbital\search.png" />
-                                      <entry key="outputName" value="search_icon" />
-                                      <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="imageAsset" value="C:\Orbital\checked.png" />
+                                      <entry key="outputName" value="ticked_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>

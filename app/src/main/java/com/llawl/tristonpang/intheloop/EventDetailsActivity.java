@@ -82,6 +82,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 HashMap<String, Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
                 String eventNameKey = mEventName.replace(" ", "_");
                 mAlreadySignedUp = data != null && data.get(eventNameKey) != null;
+                if (mAlreadySignedUp) mSignupButton.setText("Already signed-up");
             }
 
             @Override
